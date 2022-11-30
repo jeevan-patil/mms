@@ -32,7 +32,7 @@ public class MandateInboundFileProcessor {
           Paths.get(mandateFileLocations.processedDirectory() + "/" + fileName));
       log.info("Moved " + fileName + " to processed directory");
     } catch (IOException e) {
-      log.error("Exception occurred while moving file to processed directory.");
+      log.error("Exception occurred while moving file to processed directory.", e);
     }
 
     return inboundFile.getPayload().getName();

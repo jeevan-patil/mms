@@ -35,8 +35,8 @@ public class MandateInboundMessageProcessorConfig {
   }
 
   @Bean
-  @InboundChannelAdapter(value = "mandateInboundFileChannel", poller = @Poller(fixedDelay = "1000"))
-  public FileReadingMessageSource fileReadingMessageSource() {
+  @InboundChannelAdapter(value = "mandateInboundFileChannel", poller = @Poller(fixedDelay = "100"))
+  public FileReadingMessageSource mandateInboundFileSource() {
     log.info("Created mandate file inbound message channel");
     final FileReadingMessageSource reader = new FileReadingMessageSource();
     reader.setAutoCreateDirectory(true);
@@ -46,8 +46,7 @@ public class MandateInboundMessageProcessorConfig {
   }
 
   @Bean
-  //@ServiceActivator(inputChannel = "mandateInboundFileChannel")
-  public FileWritingMessageHandler fileWritingMessageHandler() {
+  public FileWritingMessageHandler mandateInboundFileWriter() {
     log.info("Created mandate file outbound message channel");
     final FileWritingMessageHandler writer = new FileWritingMessageHandler(
         mandateFileLocations.outboundDirectory());
@@ -60,7 +59,7 @@ public class MandateInboundMessageProcessorConfig {
   public IntegrationFlow flowOnReturnOfMessage() {
     return IntegrationFlow.from("mandateInboundFileChannel")
         .transform(mandateInboundFileProcessor, "process")
-        .handle(fileWritingMessageHandler())
+        .handle(mandateInboundFileWriter())
         .get();
   }
 }

@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1_mms_20221202
+      author: JP
+      changes:
+        - createTable:
+            tableName: mandate_request
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_dt
+                  type: timestamptz
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_dt
+                  type: timestamptz
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            columnNames: file_name
+            constraintName: mandate_request_file_name_unq
+            tableName: mandate_request

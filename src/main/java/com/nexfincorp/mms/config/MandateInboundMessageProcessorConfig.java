@@ -1,6 +1,7 @@
 package com.nexfincorp.mms.config;
 
 import com.nexfincorp.mms.processor.mandate.MandateInboundFileProcessor;
+import com.nexfincorp.mms.util.Constants;
 import java.io.File;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class MandateInboundMessageProcessorConfig {
   }
 
   @Bean
-  @InboundChannelAdapter(value = "mandateInboundFileChannel", poller = @Poller(fixedDelay = "100"))
+  @InboundChannelAdapter(value = "mandateInboundFileChannel",
+      poller = @Poller(fixedDelay = Constants.MANDATE_INBOUND_FILE_POLLER_IN_MS))
   public FileReadingMessageSource mandateInboundFileSource() {
     log.info("Created mandate file inbound message channel");
     final FileReadingMessageSource reader = new FileReadingMessageSource();
@@ -58,8 +60,6 @@ public class MandateInboundMessageProcessorConfig {
   @Bean
   public IntegrationFlow flowOnReturnOfMessage() {
     return IntegrationFlow.from("mandateInboundFileChannel")
-        .transform(mandateInboundFileProcessor, "process")
-        .handle(mandateInboundFileWriter())
-        .get();
+        .transform(mandateInboundFileProcessor, "process").handle(mandateInboundFileWriter()).get();
   }
 }

@@ -36,8 +36,6 @@ databaseChangeLog:
               - column:
                   name: created_by
                   type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: updated_dt
                   type: timestamptz
@@ -47,8 +45,6 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: BIGINT
-                  constraints:
-                    nullable: false
         - addUniqueConstraint:
             columnNames: file_name
             constraintName: mandate_request_file_name_unq

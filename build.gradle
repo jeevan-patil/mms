@@ -30,6 +30,7 @@ dependencies {
     runtimeOnly "org.postgresql:postgresql:42.5.1"
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus:1.10.2'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

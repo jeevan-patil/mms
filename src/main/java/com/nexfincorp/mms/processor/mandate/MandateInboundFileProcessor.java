@@ -1,6 +1,9 @@
 package com.nexfincorp.mms.processor.mandate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexfincorp.mms.config.MandateFileLocations;
+import com.nexfincorp.mms.dto.MandateInboundFileResponse;
+import com.nexfincorp.mms.service.MandateInboundFileService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,20 +22,35 @@ public class MandateInboundFileProcessor {
   @Autowired
   private MandateFileLocations mandateFileLocations;
 
+  @Autowired
+  private MandateInboundFileService mandateInboundFileService;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
   public String process(final Message<File> inboundFile) {
     final String fileName = inboundFile.getPayload().getName();
     log.info("Received mandate file : " + fileName);
 
-    final String fileNameWithPath =
-        Objects.requireNonNull(inboundFile.getHeaders().get("file_originalFile")).toString();
+    final String fileNameWithPath = Objects.requireNonNull(
+        inboundFile.getHeaders().get("file_originalFile")).toString();
     final Path inboundFilePath = Paths.get(fileNameWithPath);
 
     try {
+      final MandateInboundFileResponse response = mandateInboundFileService.process(fileName);
       Files.move(inboundFilePath,
           Paths.get(mandateFileLocations.processedDirectory() + "/" + fileName));
       log.info("Moved " + fileName + " to processed directory");
+
+      return objectMapper.writeValueAsString(response);
     } catch (IOException e) {
       log.error("Exception occurred while moving file to processed directory.", e);
+      try {
+        Files.move(inboundFilePath,
+            Paths.get(mandateFileLocations.failedDirectory() + "/" + fileName));
+      } catch (IOException ex) {
+        log.error("Could not move file {} to the error directory", fileName);
+      }
     }
 
     return inboundFile.getPayload().getName();

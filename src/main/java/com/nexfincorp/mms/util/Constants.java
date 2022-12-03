@@ -8,6 +8,6 @@ public final class Constants {
 
   private static final String VERSION = "v1";
   public static final String SERVICE_BASE_PATH = "/mms/" + VERSION;
-
+  public static Long SYSTEM_USER_ID = 0L;
 
 }

@@ -3,7 +3,7 @@ package com.nexfincorp.mms.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexfincorp.mms.dto.MandateInboundFileResponse;
 import com.nexfincorp.mms.entity.MandateRequest;
-import com.nexfincorp.mms.entity.MandateRequestRepository;
+import com.nexfincorp.mms.repository.MandateRequestRepository;
 import com.nexfincorp.mms.mapper.MandateInboundFileResponseMapper;
 import com.nexfincorp.mms.mapper.MandateInboundRequestMapper;
 import com.nexfincorp.mms.service.MandateInboundFileService;

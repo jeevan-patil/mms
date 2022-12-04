@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,4 +31,7 @@ public class MandateRequest extends BaseEntity {
   @Column
   private Long version;
 
+  public void setVersion(final Long version) {
+    this.version = Objects.isNull(version) ? 1L : (version + 1);
+  }
 }

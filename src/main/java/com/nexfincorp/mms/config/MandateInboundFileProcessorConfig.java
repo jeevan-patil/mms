@@ -18,7 +18,7 @@ import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 
 @Log4j2
 @Configuration
-public class MandateInboundMessageProcessorConfig {
+public class MandateInboundFileProcessorConfig {
 
   @Value("${mandate.pattern.inbound}")
   private String mandateInboundFilePattern;

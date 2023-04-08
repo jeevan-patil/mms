@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,18 @@ public class MandateInboundFileProcessor {
 
     try {
       final MandateInboundFileResponse response = mandateInboundFileService.process(fileName);
+
       Files.move(inboundFilePath,
           Paths.get(mandateFileLocations.processedDirectory() + "/" + fileName));
       log.info("Moved " + fileName + " to processed directory");
 
       return objectMapper.writeValueAsString(response);
-    } catch (IOException e) {
+    } catch (Exception e) {
       log.error("Exception occurred while moving file to processed directory.", e);
       try {
         Files.move(inboundFilePath,
-            Paths.get(mandateFileLocations.failedDirectory() + "/" + fileName));
+            Paths.get(mandateFileLocations.failedDirectory() + "/" + fileName),
+            StandardCopyOption.REPLACE_EXISTING);
       } catch (IOException ex) {
         log.error("Could not move file {} to the error directory", fileName);
       }

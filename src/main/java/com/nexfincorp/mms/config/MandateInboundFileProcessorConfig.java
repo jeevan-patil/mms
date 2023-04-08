@@ -49,17 +49,18 @@ public class MandateInboundFileProcessorConfig {
 
   @Bean
   public FileWritingMessageHandler mandateInboundFileWriter() {
-    log.info("Created mandate file outbound message channel");
+    log.info("Created mandate file backup message channel");
     final FileWritingMessageHandler writer = new FileWritingMessageHandler(
-        mandateFileLocations.outboundDirectory());
+        mandateFileLocations.backupDirectory());
     writer.setAutoCreateDirectory(true);
     writer.setExpectReply(false);
     return writer;
   }
 
   @Bean
-  public IntegrationFlow flowOnReturnOfMessage() {
+  public IntegrationFlow mandateInboundFileIntegrationFlow() {
     return IntegrationFlow.from("mandateInboundFileChannel")
-        .transform(mandateInboundFileProcessor, "process").handle(mandateInboundFileWriter()).get();
+        .transform(mandateInboundFileProcessor, "process")
+        .handle(mandateInboundFileWriter()).get();
   }
 }

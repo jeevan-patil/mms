@@ -3,6 +3,7 @@ package com.nexfincorp.mms.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexfincorp.mms.dto.MandateInboundFileResponse;
 import com.nexfincorp.mms.entity.MandateRequest;
+import com.nexfincorp.mms.exception.MandateFileAlreadyPresentException;
 import com.nexfincorp.mms.mapper.MandateInboundFileResponseMapper;
 import com.nexfincorp.mms.mapper.MandateInboundRequestMapper;
 import com.nexfincorp.mms.repository.MandateRequestRepository;
@@ -32,9 +33,16 @@ public class MandateInboundFileServiceImpl implements MandateInboundFileService 
     final Optional<MandateRequest> requestOptional = mandateRequestRepository.findByFileName(
         fileName);
 
+    if (requestOptional.isPresent()) {
+      log.error("The mandate with the filename {} has been processed already", fileName);
+      throw new MandateFileAlreadyPresentException(
+          "The mandate with the filename " + fileName + " has been processed already");
+    }
+
     final MandateRequest mandateRequest = requestOptional.orElse(
         MandateInboundRequestMapper.toMandateRequestEntity(
             fileName));
+
     mandateRequestRepository.save(mandateRequest);
     log.info("Mandate request entry create for file {}", fileName);
     return MandateInboundFileResponseMapper.INSTANCE.mapToResponse(mandateRequest);

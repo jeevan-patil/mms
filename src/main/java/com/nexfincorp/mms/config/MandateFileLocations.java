@@ -27,9 +27,9 @@ public class MandateFileLocations {
     return makeDirectory(env.getProperty("mandate.path.failed"));
   }
 
-  @Bean(name = "mandateOutboundDir")
-  public File outboundDirectory() {
-    return makeDirectory(env.getProperty("mandate.path.outbound"));
+  @Bean(name = "mandateBackupDir")
+  public File backupDirectory() {
+    return makeDirectory(env.getProperty("mandate.path.backup"));
   }
 
   private File makeDirectory(String path) {

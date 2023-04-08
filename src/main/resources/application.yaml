@@ -47,4 +47,4 @@ mandate:
     inbound: ${mandate.path.base-dir}/inbound
     processed: ${mandate.path.base-dir}/processed
     failed: ${mandate.path.base-dir}/failed
-    outbound: ${mandate.path.base-dir}/outbound
+    backup: ${mandate.path.base-dir}/backup

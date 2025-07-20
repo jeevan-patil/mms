@@ -18,7 +18,9 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
   public Optional<Long> getCurrentAuditor() {
     try {
       final UserPrincipal principal = userPrincipalProvider.getIfAvailable();
-      return Optional.of(principal.getId());
+      return Optional.ofNullable(principal)
+          .map(UserPrincipal::getId)
+          .or(() -> Optional.of(Constants.SYSTEM_USER_ID));
     } catch (Exception ex) {
       return Optional.of(Constants.SYSTEM_USER_ID);
     }
